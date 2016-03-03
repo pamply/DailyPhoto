@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">What is my photo today?</string>
+
+    <!-- activity_main.xml -->
+    <string name="button_discover">Discover</string>
+
+    <!-- activity_main.xml -->
+    <string name="button_rate">Rate</string>
+
+</resources>
