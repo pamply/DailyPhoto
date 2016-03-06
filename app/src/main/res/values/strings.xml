@@ -4,7 +4,10 @@
     <!-- activity_main.xml -->
     <string name="button_discover">Discover</string>
 
-    <!-- activity_main.xml -->
+    <!-- activity_show_photo.xml -->
     <string name="button_rate">Rate</string>
 
+    <!-- activity_permission_denied.xml -->
+    <string name="edit_text_denied">I wish you could accept :)</string>
+    <string name="button_request_permission">Ok, let me try</string>
 </resources>

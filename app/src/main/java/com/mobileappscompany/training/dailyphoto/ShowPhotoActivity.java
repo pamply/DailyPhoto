@@ -1,57 +1,53 @@
 package com.mobileappscompany.training.dailyphoto;
 
-import android.Manifest;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.SimpleCursorAdapter;
 
+import com.mobileappscompany.training.dailyphoto.db.PhotoInfoModel;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 /**
- * Created by admin on 3/2/2016.
+ * Author mpamplona
+ * created on 3/2/2016
+ *
+ * Activity shows daily random photo
+ *
  */
-public class ShowPhotoActivity extends AppCompatActivity{
+public class ShowPhotoActivity extends AppCompatActivity {
 
     private ImageView imgPhoto;
     private Bitmap bitmapPhoto;
     private SimpleCursorAdapter mAdapter;
+    private RatingBar ratingPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_photo);
         initVars();
-        loadRandomImage();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private void loadRandomImage() {
-        int REQUEST_PERMISSION_RESULT = 0;
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION_RESULT);
-        }
+
         String projection[] = new String[] { MediaStore.Images.Media.DATA };
         Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        // TODO Find a better way to do this
         Cursor cursor = managedQuery(images, projection, "", null, "");
 
-        final ArrayList<String> imagesPath = new ArrayList<String>();
+        final ArrayList<String> imagesPath = new ArrayList<>();
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
             do {
@@ -66,18 +62,36 @@ public class ShowPhotoActivity extends AppCompatActivity{
 
         Bitmap bitmap = BitmapFactory.decodeFile(path);
         imgPhoto.setImageBitmap(bitmap);
+        imgPhoto.setTag(path);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        loadRandomImage();
+
     }
 
     private void initVars() {
         imgPhoto = (ImageView) findViewById(R.id.img_photo);
+        ratingPhoto = (RatingBar) findViewById(R.id.rating_bar_rate);
+    }
 
-        //mAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_gallery_item, null, )
+    public void rate(View view) {
+        PhotoInfoModel photo = new PhotoInfoModel();
 
+        String imgPath = (String)imgPhoto.getTag();
+
+        photo.setCreateDate(new Date());
+        photo.setPath(imgPath);
+        photo.setRate((int) ratingPhoto.getRating());
+        // TODO to use the real place
+        photo.setPlace("place test");
+
+        photo.save();
+
+        Intent intent = new Intent(this, PhotoListActivity.class);
+        startActivity(intent);
     }
 
 }
