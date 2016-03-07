@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.mobileappscompany.training.dailyphoto.R;
 import com.mobileappscompany.training.dailyphoto.db.PhotoInfoModel;
+import com.mobileappscompany.training.dailyphoto.ifc.ItemTouchHelperAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -26,9 +27,17 @@ import java.util.List;
  *
  */
 
-public class RecyclerViewPhotoAdapter extends RecyclerView.Adapter<RecyclerViewPhotoAdapter.PhotoViewHolder> {
+public class RecyclerViewPhotoAdapter extends RecyclerView.Adapter<RecyclerViewPhotoAdapter.PhotoViewHolder> implements ItemTouchHelperAdapter {
 
     private List<PhotoInfoModel> photos;
+
+    @Override
+    public void onItemDismiss(int position) {
+        PhotoInfoModel photo = photos.get(position);
+        photo.delete();
+        photos.remove(position);
+        notifyItemRemoved(position);
+    }
 
     public RecyclerViewPhotoAdapter(List<PhotoInfoModel> photos) {
         this.photos = photos;
@@ -62,10 +71,6 @@ public class RecyclerViewPhotoAdapter extends RecyclerView.Adapter<RecyclerViewP
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    public List<PhotoInfoModel> getPhotos() {
-        return photos;
     }
 
     public static class PhotoViewHolder extends RecyclerView.ViewHolder {

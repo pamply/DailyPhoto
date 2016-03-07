@@ -45,9 +45,7 @@ public class PhotoListActivity extends AppCompatActivity  {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                PhotoInfoModel photo = ((RecyclerViewPhotoAdapter) recyclerViewList.getAdapter()).getPhotos().get(viewHolder.getAdapterPosition());
-                photo.delete();
-                photos.remove(viewHolder.getAdapterPosition());
+                ((RecyclerViewPhotoAdapter)recyclerViewList.getAdapter()).onItemDismiss(viewHolder.getAdapterPosition());
                 
             }
         };
