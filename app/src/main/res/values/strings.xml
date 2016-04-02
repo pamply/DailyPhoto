@@ -3,6 +3,8 @@
 
     <!-- activity_main.xml -->
     <string name="button_discover">Discover</string>
+    <string name="title_dialog_permission">Hi</string>
+    <string name="message_dialog_permission">Why you need to give permission? well, you don\'t. But the app won\'t work :(</string>
 
     <!-- activity_show_photo.xml -->
     <string name="button_rate">Rate</string>

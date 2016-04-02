@@ -13,4 +13,6 @@ public interface ItemTouchHelperAdapter {
 
     void onItemDismiss(int position);
 
+    void onItemSwip(int position);
+
 }

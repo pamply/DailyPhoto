@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
+
     <android.support.v7.widget.CardView
         android:id="@+id/card_view_photo"
         android:layout_width="match_parent"
@@ -14,38 +14,73 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxWidth="160dp"
+                android:maxHeight="100dp"
+                android:adjustViewBounds="true"
                 android:id="@+id/image_view_photo"
-                android:padding="10dp"
+                android:paddingLeft="16dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"/>
-            <TextView
+
+            <com.mobileappscompany.training.dailyphoto.custom.TextViewRoboto
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_view_place"
+                android:paddingLeft="16dp"
                 android:text="text"
                 android:layout_toRightOf="@id/image_view_photo"
                 android:layout_alignParentTop="true"
                 android:layout_marginBottom="5dp"
                 android:textSize="26sp"/>
-            <TextView
+
+            <com.mobileappscompany.training.dailyphoto.custom.TextViewRoboto
                 android:text="text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_view_date"
                 android:layout_marginBottom="5dp"
+                android:paddingLeft="16dp"
                 android:textSize="18sp"
                 android:layout_toRightOf="@id/image_view_photo"
                 android:layout_below="@id/text_view_place"/>
             <RatingBar
                 android:isIndicator="true"
                 android:layout_width="wrap_content"
+                android:numStars="5"
+                android:paddingLeft="16dp"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/image_view_photo"
                 android:layout_below="@id/text_view_date"
                 android:id="@+id/rating_bar_rate"/>
         </RelativeLayout>
 
+        <LinearLayout
+            android:background="@android:color/darker_gray"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/layout_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.mobileappscompany.training.dailyphoto.custom.TextViewRoboto
+                android:id="@+id/text_dismiss"
+                android:text="DISMISS"
+                android:paddingLeft="16dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.mobileappscompany.training.dailyphoto.custom.TextViewRoboto
+                android:id="@+id/text_undo"
+                android:text="UNDO"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:paddingRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

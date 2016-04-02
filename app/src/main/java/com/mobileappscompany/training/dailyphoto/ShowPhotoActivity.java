@@ -15,55 +15,58 @@ import android.widget.SimpleCursorAdapter;
 
 import com.mobileappscompany.training.dailyphoto.db.PhotoInfoModel;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * Author mpamplona
  * created on 3/2/2016
- *
+ * <p>
  * Activity shows daily random photo
- *
  */
 public class ShowPhotoActivity extends AppCompatActivity {
 
     private ImageView imgPhoto;
-    private Bitmap bitmapPhoto;
-    private SimpleCursorAdapter mAdapter;
+    private int currentRate;
     private RatingBar ratingPhoto;
+
+    private SimpleCursorAdapter mAdapter;
+    private static String[] IMG_PROJECTION = {
+            MediaStore.Images.Media.DATA,
+            MediaStore.Images.Media.MIME_TYPE
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_photo);
+
         initVars();
     }
 
     private void loadRandomImage() {
 
-        String projection[] = new String[] { MediaStore.Images.Media.DATA };
-        Uri images = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        // TODO Find a better way to do this
-        Cursor cursor = managedQuery(images, projection, "", null, "");
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String selectionClause = "";
+        String sort = "random() limit 1";
 
-        final ArrayList<String> imagesPath = new ArrayList<>();
-        if (cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            do {
-                imagesPath.add(cursor.getString(columnIndex));
-            } while(cursor.moveToNext());
+        Cursor cursor = getContentResolver().query(uri, IMG_PROJECTION, selectionClause, null, sort);
+
+        String imagePath = "";
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                imagePath = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
         }
 
-        Random random = new Random();
-        int count = imagesPath.size();
-        int randomIndex = random.nextInt(count);
-        String path = imagesPath.get(randomIndex);
 
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
         imgPhoto.setImageBitmap(bitmap);
-        imgPhoto.setTag(path);
+        imgPhoto.setTag(imagePath);
+
     }
+
 
     @Override
     protected void onResume() {
@@ -78,20 +81,26 @@ public class ShowPhotoActivity extends AppCompatActivity {
     }
 
     public void rate(View view) {
-        PhotoInfoModel photo = new PhotoInfoModel();
+        currentRate = (int) ratingPhoto.getRating();
 
-        String imgPath = (String)imgPhoto.getTag();
+        savePhoto();
+
+        Intent intent = new Intent(this, PhotoListActivity.class);
+        startActivity(intent);
+    }
+
+    private void savePhoto() {
+
+        PhotoInfoModel photo = new PhotoInfoModel();
+        String imgPath = (String) imgPhoto.getTag();
 
         photo.setCreateDate(new Date());
         photo.setPath(imgPath);
-        photo.setRate((int) ratingPhoto.getRating());
+        photo.setRate(currentRate);
         // TODO to use the real place
         photo.setPlace("place test");
 
         photo.save();
-
-        Intent intent = new Intent(this, PhotoListActivity.class);
-        startActivity(intent);
     }
 
 }
